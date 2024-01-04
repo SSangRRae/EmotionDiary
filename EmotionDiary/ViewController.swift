@@ -12,7 +12,6 @@ class ViewController: UIViewController {
     @IBOutlet var emotionButtons: [UIButton]!
     @IBOutlet var emotionLabels: [UILabel]!
     let emotions = ["기쁘다", "행복해", "사랑해", "짜증나", "그냥저냥", "졸리다", "황당해", "이게뭐람", "우울해"]
-    var emotionNum = Array(repeating: 0, count: 9)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,9 +28,10 @@ class ViewController: UIViewController {
     
     @IBAction func emotionButtonsClicked(_ sender: UIButton) {
         let tag = sender.tag
+        let number = UserDefaults.standard.integer(forKey: "emotion\(tag)")
         
-        emotionNum[tag] += 1
-        emotionLabels[tag].text = "\(emotions[tag]): \(emotionNum[tag])"
+        UserDefaults.standard.set(number + 1, forKey: "emotion\(tag)")
+        emotionLabels[tag].text = "\(emotions[tag]): \(number + 1)"
     }
     
     func setNavigationItem() {
@@ -73,18 +73,13 @@ class ViewController: UIViewController {
     
     func setEmotionLabelsText() {
         for emotionLabel in emotionLabels {
-            let randomNum = randomInt()
             let tag = emotionLabel.tag
-            let text =  "\(emotions[tag]): \(randomNum)"
+            let number = UserDefaults.standard.integer(forKey: "emotion\(tag)")
+            let text =  "\(emotions[tag]): \(number)"
             
             emotionLabel.text = text
             emotionLabel.textAlignment = .center
-            emotionNum[tag] = randomNum
         }
-    }
-    
-    func randomInt() -> Int {
-        Int.random(in: 0...5)
     }
 }
 
